@@ -1,0 +1,4 @@
+---
+# file: roles/docker-dna_percona/tasks/main.yml
+
+- include: install_percona.yml
