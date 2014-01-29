@@ -21,6 +21,6 @@ RUN ( echo '[docker-dna_galera]' && \
       && apt-get clean      
 
 # Expose MySQL/Galera 
-EXPOSE 3306 4444 4567 4568
+EXPOSE 3306 4444 4567 4568 9200
 #ENTRYPOINT [""]
 #CMD ["--help"]

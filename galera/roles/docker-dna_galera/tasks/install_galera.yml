@@ -21,13 +21,18 @@
        state=present
   with_items:
     - percona-xtradb-cluster-server-5.6
+    - python-mysqldb
 
 - name: Configure Percona XtraDB Cluster server
   template: src=my.cnf.j2
             dest=/etc/mysql/my.cnf
 
-- name: Restart MySQL 
-  action: service name=mysql state=restarted
-
 - name: Add Docker database user 
   mysql_user: user="docker" host="172.17.%" password="docker" priv=*.*:"all privileges"
+
+- name: Add Docker database user 
+  mysql_user: user="xtrabackup" host="localhost" password="docker" priv=*.*:"grant, reload, replication client"
+
+- name: Stop MySQL 
+  action: service name=mysql state=stopped
+
