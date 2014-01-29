@@ -1,2 +1,8 @@
 ---
-# file: roles/docker-dna_rabbitmq/vars/main.yml
+# file: roles/docker-dna_galera/vars/main.yml
+# these values are default - change for security!
+galera:
+    dbusers:
+        clustercheck:
+            username: clustercheck
+            password: clustercheck

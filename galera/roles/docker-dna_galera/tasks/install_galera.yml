@@ -33,6 +33,9 @@
 - name: Add Docker database user 
   mysql_user: user="xtrabackup" host="localhost" password="docker" priv=*.*:"grant, reload, replication client"
 
+- name: Add clustercheck database user 
+  mysql_user: user={{ galera['dbusers']['clustercheck']['username'] }} host="localhost" password={{ galera['dbusers']['clustercheck']['password'] }} priv=*.*:"grant, reload, replication client"
+
 - name: Stop MySQL 
   action: service name=mysql state=stopped
 
