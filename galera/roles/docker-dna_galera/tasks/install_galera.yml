@@ -25,3 +25,9 @@
 - name: Configure Percona XtraDB Cluster server
   template: src=my.cnf.j2
             dest=/etc/mysql/my.cnf
+
+- name: Restart MySQL 
+  action: service name=mysql state=restarted
+
+- name: Add Docker database user 
+  mysql_user: user="docker" host="172.17.%" password="docker" priv=*.*:"all privileges"
