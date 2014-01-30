@@ -22,16 +22,17 @@
   with_items:
     - percona-xtradb-cluster-server-5.6
     - python-mysqldb
+    - xinetd
 
 - name: Configure Percona XtraDB Cluster server
-  template: src=my.cnf.j2
+  template: src=etc/mysql/my.cnf.j2
             dest=/etc/mysql/my.cnf
 
 - name: Add Docker database user 
-  mysql_user: user="docker" host="172.17.%" password="docker" priv=*.*:"all privileges"
+  mysql_user: user={{ galera['dbusers']['docker']['username'] }} host={{ galera['dbusers']['docker']['host'] }}  password={{ galera['dbusers']['docker']['password'] }} priv=*.*:"all privileges"
 
 - name: Add Docker database user 
-  mysql_user: user="xtrabackup" host="localhost" password="docker" priv=*.*:"grant, reload, replication client"
+  mysql_user: user={{ galera['dbusers']['xtrabackup']['username'] }} host="localhost" password={{ galera['dbusers']['xtrabackup']['password'] }} priv=*.*:"grant, reload, replication client"
 
 - name: Add clustercheck database user 
   mysql_user: user={{ galera['dbusers']['clustercheck']['username'] }} host="localhost" password={{ galera['dbusers']['clustercheck']['password'] }} priv=*.*:"grant, reload, replication client"
@@ -39,3 +40,15 @@
 - name: Stop MySQL 
   action: service name=mysql state=stopped
 
+- name: Copy clustercheck script
+  template: src=usr/bin/clustercheck.j2
+            dest=/usr/bin/clustercheck
+            owner=root
+            group=root
+            mode=0700
+
+- name: Append clustercheck to services 
+  lineinfile: dest=/etc/services
+              regexp="^mysqlchk        9200/tcp"
+              line="mysqlchk        9200/tcp"
+              state=present
