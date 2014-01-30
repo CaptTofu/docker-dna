@@ -1,20 +1,5 @@
 ---
-# file: roles/docker-dna_galera/tasks/install_galera.yml
-
-- name: Obtain Percona public key
-  apt_key: url=http://keys.gnupg.net/pks/lookup?op=get&search=0x1C4CBDCDCD2EFD2A
-           state=present
-
-- name: Add Percona repository
-  apt_repository: repo='deb http://repo.percona.com/apt precise main'
-                  state=present
-
-- name: Add Percona source repository
-  apt_repository: repo='deb-src http://repo.percona.com/apt precise main'
-                  state=present
-
-- name: Update apt cache
-  apt: update_cache=yes
+- include: repo.yml
 
 - name: Install Percona XtraDB Cluster server
   apt: pkg={{ item }} 
@@ -28,27 +13,9 @@
   template: src=etc/mysql/my.cnf.j2
             dest=/etc/mysql/my.cnf
 
-- name: Add Docker database user 
-  mysql_user: user={{ galera['dbusers']['docker']['username'] }} host={{ galera['dbusers']['docker']['host'] }}  password={{ galera['dbusers']['docker']['password'] }} priv=*.*:"all privileges"
-
-- name: Add Docker database user 
-  mysql_user: user={{ galera['dbusers']['xtrabackup']['username'] }} host="localhost" password={{ galera['dbusers']['xtrabackup']['password'] }} priv=*.*:"grant, reload, replication client"
-
-- name: Add clustercheck database user 
-  mysql_user: user={{ galera['dbusers']['clustercheck']['username'] }} host="localhost" password={{ galera['dbusers']['clustercheck']['password'] }} priv=*.*:"grant, reload, replication client"
+- include: grants.yml
 
 - name: Stop MySQL 
   action: service name=mysql state=stopped
 
-- name: Copy clustercheck script
-  template: src=usr/bin/clustercheck.j2
-            dest=/usr/bin/clustercheck
-            owner=root
-            group=root
-            mode=0700
-
-- name: Append clustercheck to services 
-  lineinfile: dest=/etc/services
-              regexp="^mysqlchk        9200/tcp"
-              line="mysqlchk        9200/tcp"
-              state=present
+- include: clustercheck.yml
