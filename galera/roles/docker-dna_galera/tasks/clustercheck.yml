@@ -7,8 +7,16 @@
             group=root
             mode=0700
 
-- name: Append clustercheck to services 
-  lineinfile: dest=/etc/services
-              regexp="^mysqlchk        9200/tcp"
-              line="mysqlchk        9200/tcp"
-              state=present
+- name: Copy clustercheck script
+  template: src=usr/local/bin/pyclustercheck.j2
+            dest=/usr/local/bin/pyclustercheck
+            owner=root
+            group=root
+            mode=0700
+
+# unable to get working on Docker
+#- name: Append clustercheck to services 
+#  lineinfile: dest=/etc/services
+#              regexp="^mysqlchk        9200/tcp"
+#              line="mysqlchk        9200/tcp"
+#              state=present
