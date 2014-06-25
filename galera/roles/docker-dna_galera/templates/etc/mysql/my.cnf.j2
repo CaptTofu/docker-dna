@@ -46,7 +46,7 @@ log_slave_updates
 wsrep_provider          = /usr/lib/libgalera_smm.so
 wsrep_slave_threads     = 4
 wsrep_sst_method        = xtrabackup
-wsrep_sst_auth          = {{ galera['dbusers']['xtrabackup']['username'] }}:{{ galera['dbusers']['xtrabackup']['password'] }}
+wsrep_sst_auth          = {{ xtrabackup_username }}:{{ xtrabackup_password }}
 wsrep_cluster_name      = percona-cluster
 wsrep_cluster_address   = gcomm://
 # wsrep_node_name         =

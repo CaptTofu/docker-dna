@@ -13,16 +13,17 @@ RUN apt-get update \
 # Add files
 ADD . ./DockerDNA
 
-# Install RabbitMQ
+RUN mkdir /.ssh
+
+# Install Percona XtraDB Cluster 
 RUN ( echo '[docker-dna_galera]' && \
       echo 'localhost' \
     ) > /etc/ansible/hosts \
       && ansible-playbook ./DockerDNA/dna.yml --connection=local \
-      && apt-get clean      
+      && apt-get clean
 
-# Expose MySQL/Galera 
+# Expose MySQL/Galera
 EXPOSE 3306 4444 4567 4568 9200
-#ENTRYPOINT [""]
-# ENTRYPOINT ["/usr/bin/mysqld_safe"]
-ENTRYPOINT ["/usr/local/bin/mysql_run.sh"]
-# CMD ["/usr/bin/mysqld_safe", "--wsrep_cluster_address=$CLUSTER_ADDRESS"]
+
+# entrypoint 
+CMD ['/usr/local/bin/mysql_run.sh']

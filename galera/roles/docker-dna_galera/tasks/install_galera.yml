@@ -9,7 +9,7 @@
     - xinetd
     - telnet
 
-- name: Copy the helper script 
-  copy: src=usr/local/bin/mysql_run.sh 
-        dest=/usr/local/bin/mysql_run.sh 
+- name: Copy the helper script
+  copy: src=usr/local/bin/mysql_run.sh
+        dest=/usr/local/bin/mysql_run.sh
         mode=0755

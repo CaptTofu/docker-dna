@@ -6,5 +6,15 @@
        state=present
   with_items:
     - vim
+    - ssh
 
+- name: create ssh log dir
+  file: path=/var/run/sshd owner=root state=directory
 
+- name: create ssh dir
+  file: path=/.ssh owner=root mode=0700 state=directory
+
+- name: set up authorized_keys
+  copy: src=docker.pem.pub
+        dest=/.ssh/authorized_keys
+        mode=0700

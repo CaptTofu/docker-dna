@@ -1,0 +1,7 @@
+clustercheck_username: docker
+clustercheck_password: docker
+xtrabackup_username: docker
+xtrabackup_password: docker
+docker_host: localhost
+docker_username: docker
+docker_password: docker
